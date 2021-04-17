@@ -16,6 +16,8 @@ export interface ISound {
   size: number;
   key: string;
   url: string;
+  url_vocals: string;
+  url_accompaniment: string;
 }
 
 export interface IFile {
@@ -28,6 +30,8 @@ export interface IFile {
   progress?: number;
   error?: boolean;
   url: string;
+  url_vocals: string;
+  url_accompaniment: string;
 }
 
 interface IFileContextData {
@@ -94,18 +98,20 @@ const FileProvider: React.FC = ({ children }) => {
         })
         .then((response) => {
           console.log(
-            `A imagem ${uploadedFile.name} já foi enviada para o servidor!`
+            `A música ${uploadedFile.name} já foi enviada para o servidor!`
           );
 
           updateFile(uploadedFile.id, {
             uploaded: true,
             id: response.data._id,
             url: response.data.url,
+            url_accompaniment: response.data.url_accompaniment,
+            url_vocals: response.data.url_vocals
           });
         })
         .catch((err) => {
           console.error(
-            `Houve um problema para fazer upload da imagem ${uploadedFile.name} no servidor AWS`
+            `Houve um problema para fazer upload da música ${uploadedFile.name} no servidor AWS`
           );
           console.log(err);
 
@@ -129,6 +135,8 @@ const FileProvider: React.FC = ({ children }) => {
         uploaded: false,
         error: false,
         url: "",
+        url_vocals: "",
+        url_accompaniment: ""
       }));
 
       // concat é mais performático que ...spread
