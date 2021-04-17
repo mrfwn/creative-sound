@@ -1,0 +1,23 @@
+services:
+    frontend:
+        build: ./frontend
+        ports:
+            - "3000:3000"
+        stdin_open: true
+    backend:
+        build: ./backend
+        ports:
+            - "3333:3333"
+            - "57121:57121"
+        networks:
+            - db-net
+        environment:
+            MONGO_URL: "mongodb://db:27017"
+    db:
+        image: mongo:3.6.23-xenial
+        restart: always
+        networks:
+            - db-net
+
+networks:
+    db-net: {}
