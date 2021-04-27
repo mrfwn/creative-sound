@@ -5,5 +5,5 @@ WORKDIR /home/node
 
 RUN yarn install --frozen-lockfile
 
-# 3000
+# 300
 CMD yarn start
