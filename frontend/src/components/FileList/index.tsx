@@ -19,7 +19,7 @@ const FileList = () => {
   useEffect(() => {
     if (files.length > 0) {
       console.log(files)
-      const audio = files ? files[0].url_accompaniment : '';
+      const audio = files ? files[0].url_bass : ''; // TODO: Change bass to be selected
       var sound = new Howl({
         src: [audio],
         sprite: {
@@ -60,7 +60,7 @@ const FileList = () => {
               <strong>{uploadedFile.name}</strong>
               <span>
                 {uploadedFile.readableSize}{" "}
-                {!!uploadedFile.url && !!uploadedFile.url_accompaniment && !!uploadedFile.url_vocals && (
+                {!!uploadedFile.url && !!uploadedFile.url_bass && !!uploadedFile.url_vocals && ( // TODO: Change bass
                   <button onClick={(e) => deleteFile(uploadedFile.id)}>
                     Excluir
                   </button>
@@ -82,9 +82,9 @@ const FileList = () => {
               />
             )}
 
-            {uploadedFile.url_accompaniment && (
+            {uploadedFile.url_bass && (
               <a
-                href={uploadedFile.url_accompaniment}
+                href={uploadedFile.url_bass} // Change Bass
                 target="_blank"
                 rel="noopener noreferrer"
               >

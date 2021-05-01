@@ -17,7 +17,10 @@ export interface ISound {
   key: string;
   url: string;
   url_vocals: string;
-  url_accompaniment: string;
+  url_bass: string;
+  url_piano: string;
+  url_drums: string;
+  url_other: string;
 }
 
 export interface IFile {
@@ -31,7 +34,10 @@ export interface IFile {
   error?: boolean;
   url: string;
   url_vocals: string;
-  url_accompaniment: string;
+  url_bass: string;
+  url_piano: string;
+  url_drums: string;
+  url_other: string;
 }
 
 interface IFileContextData {
@@ -105,7 +111,10 @@ const FileProvider: React.FC = ({ children }) => {
             uploaded: true,
             id: response.data._id,
             url: response.data.url,
-            url_accompaniment: response.data.url_accompaniment,
+            url_bass: response.data.url_bass,
+            url_piano: response.data.url_piano,
+            url_drums: response.data.url_drums,
+            url_other: response.data.url_other,
             url_vocals: response.data.url_vocals
           });
         })
@@ -136,7 +145,10 @@ const FileProvider: React.FC = ({ children }) => {
         error: false,
         url: "",
         url_vocals: "",
-        url_accompaniment: ""
+        url_bass: "",
+        url_piano: "",
+        url_drums: "",
+        url_other: "",
       }));
 
       // concat é mais performático que ...spread

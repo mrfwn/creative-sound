@@ -15,21 +15,32 @@ routes.get("/sounds", async (req, res) => {
 });
 
 routes.post("/sounds", multer(multerConfig).single("file"), async (req, res) => {
-  const { originalname: name, size, key, location: url = "", url_vocals = "", url_accompaniment = "" } = req.file;
+  const { originalname: name, 
+    size, 
+    key, 
+    location: url = "", 
+    url_vocals = "", 
+    url_bass = "", 
+    url_piano = "", 
+    url_drums = "", 
+    url_other = "" } = req.file;
   const sound = await Sound.create({
     name,
     size,
     key,
     url,
     url_vocals,
-    url_accompaniment
+    url_bass,
+    url_piano,
+    url_drums,
+    url_other,
   });
+  console.log(`spleeter ${key}`) // TODO: files with spaces are breaking
   const pathFile = path.resolve(__dirname, "..", "tmp", "uploads");
 
-  await spawn(`cd ${pathFile} && spleeter separate -p spleeter:2stems -c mp3 -o spleeter ${key}`, {
+  await spawn(`cd ${pathFile} && spleeter separate -p spleeter:5stems -c mp3 -o spleeter ${key}`, {
     shell: true
   });
-
   return res.json(sound);
 });
 
