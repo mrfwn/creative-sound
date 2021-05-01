@@ -3,7 +3,7 @@ import { CircularProgressbar } from "react-circular-progressbar";
 import { Howl, Howler } from 'howler';
 import { MdCheckCircle, MdError, MdMoodBad, MdKeyboardVoice } from "react-icons/md";
 import { FaMusic } from "react-icons/fa";
-import { GiMusicalKeyboard } from "react-icons/gi";
+import { GiMusicalKeyboard, GiGuitar, GiDrum } from "react-icons/gi";
 import { useFiles } from "../../context/files";
 import { IFile } from "../../context/files";
 import socketIOClient from "socket.io-client";
@@ -82,13 +82,36 @@ const FileList = () => {
               />
             )}
 
+            {uploadedFile.url_drums && (
+              <a
+                href={uploadedFile.url_drums} // Change Bass
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <GiDrum style={{ marginRight: 8 }} size={24} color="#222" />
+              </a>
+            )}
+
+{/* url_piano: string;
+  url_drums: string; */}
+  {/* url_other: string; */}
+            {uploadedFile.url_piano && (
+              <a
+                href={uploadedFile.url_piano} // Change Bass
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <GiMusicalKeyboard style={{ marginRight: 8 }} size={24} color="#222" />
+              </a>
+            )}
+
             {uploadedFile.url_bass && (
               <a
                 href={uploadedFile.url_bass} // Change Bass
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <GiMusicalKeyboard style={{ marginRight: 8 }} size={24} color="#222" />
+                <GiGuitar style={{ marginRight: 8 }} size={24} color="#222" />
               </a>
             )}
 
