@@ -18,9 +18,9 @@ const FileList = () => {
   const [audioSrc, setAudioSrc] = useState("");
 
   const getProperCss = (src: string) => {
-    const css = {cursor:"pointer", borderStyle: "none"};
+    const css = {cursor:"pointer", borderStyle: "none", width: 32, height: 32};
     if (src == audioSrc) {
-      css.borderStyle = "solid";
+      css.borderStyle = "dotted";
     }
     return css
   }
@@ -98,48 +98,48 @@ const FileList = () => {
             )}
 
             {uploadedFile.url_drums && (
-              <a
+              <div
               style={getProperCss(uploadedFile.url_drums)}
               onClick={() => setAudioSrc(uploadedFile.url_drums)}
               >
                 <GiDrum style={{ marginRight: 8 }} size={24} color="#222" />
-              </a>
+              </div>
             )}
             
             {uploadedFile.url_piano && (
-              <a
+              <div
               style={getProperCss(uploadedFile.url_piano)}
                 onClick={() => setAudioSrc(uploadedFile.url_piano)}
               >
                 <GiMusicalKeyboard style={{ marginRight: 8 }} size={24} color="#222" />
-              </a>
+              </div>
             )}
 
             {uploadedFile.url_bass && (
-              <a
+              <div
               style={getProperCss(uploadedFile.url_bass)}
               onClick={() => setAudioSrc(uploadedFile.url_bass)}
               >
                 <GiGuitar style={{ marginRight: 8 }} size={24} color="#222" />
-              </a>
+              </div>
             )}
 
             {uploadedFile.url_vocals && (
-              <a
+              <div
               style={getProperCss(uploadedFile.url_vocals)}
               onClick={() => setAudioSrc(uploadedFile.url_vocals)}
               >
                 <MdKeyboardVoice style={{ marginRight: 8 }} size={24} color="#222" />
-              </a>
+              </div>
             )}
 
             {uploadedFile.url && (
-              <a
+              <div
               style={getProperCss(uploadedFile.url)}
               onClick={() => setAudioSrc(uploadedFile.url)}
               >
                 <FaMusic style={{ marginRight: 8 }} size={24} color="#222" />
-              </a>
+              </div>
             )}
 
             {uploadedFile.uploaded && (
