@@ -15,12 +15,20 @@ import { Container, FileInfo, Preview } from "./styles";
 const FileList = () => {
   const { uploadedFiles: files, deleteFile } = useFiles();
   const [response, setResponse] = useState("");
+  const [audioSrc, setAudioSrc] = useState("");
+
+  const getProperCss = (src: string) => {
+    const css = {cursor:"pointer", borderStyle: "none"};
+    if (src == audioSrc) {
+      css.borderStyle = "solid";
+    }
+    return css
+  }
 
   useEffect(() => {
     if (files.length > 0) {
-      console.log(files)
-      const audio = files ? files[0].url_bass : ''; // TODO: Change bass to be selected
-      var sound = new Howl({
+      const audio = audioSrc;
+      var sound = new Howl({ // TODO: Change the way sound is setted
         src: [audio],
         sprite: {
           blast: [0, 3000],
@@ -28,16 +36,23 @@ const FileList = () => {
           winner: [6000, 5000]
         }
       });
-      sound.play('laser');
+      sound.play('winner');
     }
 
-  }, [response])
+  }, [response]);
+
   useEffect(() => {
     const socket = socketIOClient("http://localhost:3333");
     socket.on("FromAPI", data => {
       setResponse(JSON.stringify(data));
     });
   }, []);
+
+  useEffect(() => {
+    const data = {"address":"/3/push1","args":[{"type":"f","value":0}]};
+    setResponse(JSON.stringify(data));
+    console.log(data)
+  }, [audioSrc]);
 
   if (!files.length)
     return (
@@ -60,7 +75,7 @@ const FileList = () => {
               <strong>{uploadedFile.name}</strong>
               <span>
                 {uploadedFile.readableSize}{" "}
-                {!!uploadedFile.url && !!uploadedFile.url_bass && !!uploadedFile.url_vocals && ( // TODO: Change bass
+                {!!uploadedFile.url && (
                   <button onClick={(e) => deleteFile(uploadedFile.id)}>
                     Excluir
                   </button>
@@ -84,22 +99,17 @@ const FileList = () => {
 
             {uploadedFile.url_drums && (
               <a
-                href={uploadedFile.url_drums} // Change Bass
-                target="_blank"
-                rel="noopener noreferrer"
+              style={getProperCss(uploadedFile.url_drums)}
+              onClick={() => setAudioSrc(uploadedFile.url_drums)}
               >
                 <GiDrum style={{ marginRight: 8 }} size={24} color="#222" />
               </a>
             )}
-
-{/* url_piano: string;
-  url_drums: string; */}
-  {/* url_other: string; */}
+            
             {uploadedFile.url_piano && (
               <a
-                href={uploadedFile.url_piano} // Change Bass
-                target="_blank"
-                rel="noopener noreferrer"
+              style={getProperCss(uploadedFile.url_piano)}
+                onClick={() => setAudioSrc(uploadedFile.url_piano)}
               >
                 <GiMusicalKeyboard style={{ marginRight: 8 }} size={24} color="#222" />
               </a>
@@ -107,9 +117,8 @@ const FileList = () => {
 
             {uploadedFile.url_bass && (
               <a
-                href={uploadedFile.url_bass} // Change Bass
-                target="_blank"
-                rel="noopener noreferrer"
+              style={getProperCss(uploadedFile.url_bass)}
+              onClick={() => setAudioSrc(uploadedFile.url_bass)}
               >
                 <GiGuitar style={{ marginRight: 8 }} size={24} color="#222" />
               </a>
@@ -117,9 +126,8 @@ const FileList = () => {
 
             {uploadedFile.url_vocals && (
               <a
-                href={uploadedFile.url_vocals}
-                target="_blank"
-                rel="noopener noreferrer"
+              style={getProperCss(uploadedFile.url_vocals)}
+              onClick={() => setAudioSrc(uploadedFile.url_vocals)}
               >
                 <MdKeyboardVoice style={{ marginRight: 8 }} size={24} color="#222" />
               </a>
@@ -127,9 +135,8 @@ const FileList = () => {
 
             {uploadedFile.url && (
               <a
-                href={uploadedFile.url}
-                target="_blank"
-                rel="noopener noreferrer"
+              style={getProperCss(uploadedFile.url)}
+              onClick={() => setAudioSrc(uploadedFile.url)}
               >
                 <FaMusic style={{ marginRight: 8 }} size={24} color="#222" />
               </a>
