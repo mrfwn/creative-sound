@@ -18,7 +18,7 @@ const io = require("socket.io")(server, {
 });
 
 
-
+//porta mongo
 mongoose.connect(
   process.env.MONGO_URL || "mongodb://localhost:27017",
   {
@@ -37,7 +37,7 @@ app.use(
 
 app.use(require("./routes"));
 server.listen(3333);
-
+//acesso local
 var udpPort = new osc.UDPPort({
   localAddress: "127.0.0.1",
   localPort: 57121,
