@@ -1,3 +1,4 @@
+//Teste
 import React, { useState, useEffect, useRef } from "react";
 import { Howl, Howler } from 'howler';
 import GlobalStyle from "./styles/global";
