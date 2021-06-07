@@ -18,6 +18,8 @@ services:
         restart: always
         networks:
             - db-net
+        ports:
+            - "27017:27017"
 
 networks:
     db-net: {}

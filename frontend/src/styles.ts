@@ -1,5 +1,4 @@
 import styled from "styled-components";
-
 export const Container = styled.div`
   height: 100%;
   display: flex;
@@ -9,9 +8,11 @@ export const Container = styled.div`
 
 export const Content = styled.div`
   width: 100%;
+  height: 92%;
   max-width: 400px;
   margin: 30px;
   background: #fff;
   border-radius: 4px;
   padding: 20px;
 `;
+

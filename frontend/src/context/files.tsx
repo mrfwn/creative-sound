@@ -21,6 +21,20 @@ export interface ISound {
   url_piano: string;
   url_drums: string;
   url_other: string;
+  urls_beats_vocals: string[];
+  urls_beats_bass: string[];
+  urls_beats_piano: string[];
+  urls_beats_drums: string[];
+  urls_beats_other: string[];
+}
+
+export enum InstrumentType {
+  Vocals = 'vocals',
+  Bass = 'bass',
+  Piano = 'piano',
+  Drums = 'drums',
+  Other = 'other'
+
 }
 
 export interface IFile {
@@ -38,30 +52,51 @@ export interface IFile {
   url_piano: string;
   url_drums: string;
   url_other: string;
+  select: boolean;
+  urls_beats_vocals: Beat[];
+  urls_beats_bass: Beat[];
+  urls_beats_piano: Beat[];
+  urls_beats_drums: Beat[];
+  urls_beats_other: Beat[];
+}
+
+export type Beat = {
+  url: string;
+  note: string | undefined;
+  index: number;
 }
 
 interface IFileContextData {
   uploadedFiles: IFile[];
+  selectedFile: IFile | undefined;
   deleteFile(id: string): void;
   handleUpload(file: any): void;
+  selectMusic(file: IFile): void;
+  updateNote(note: string, uploadedFile: IFile, index: number, instrument: string): void;
 }
 
 const FileContext = createContext<IFileContextData>({} as IFileContextData);
 
 const FileProvider: React.FC = ({ children }) => {
   const [uploadedFiles, setUploadedFiles] = useState<IFile[]>([]);
-
+  const [selectedFile, setSelectedFile] = useState<IFile | undefined>(undefined);
   useEffect(() => {
     api.get<ISound[]>("sounds").then((response) => {
       const soundFormatted: IFile[] = response.data.map((sound) => {
         return {
           ...sound,
+          urls_beats_vocals: sound.urls_beats_vocals.map((url, index) => ({ note: undefined, url, index })),
+          urls_beats_bass: sound.urls_beats_bass.map((url, index) => ({ note: undefined, url, index })),
+          urls_beats_piano: sound.urls_beats_piano.map((url, index) => ({ note: undefined, url, index })),
+          urls_beats_drums: sound.urls_beats_drums.map((url, index) => ({ note: undefined, url, index })),
+          urls_beats_other: sound.urls_beats_other.map((url, index) => ({ note: undefined, url, index })),
           id: sound._id,
           preview: sound.url,
           readableSize: filesize(sound.size),
           file: null,
           error: false,
           uploaded: true,
+          select: false
         };
       });
 
@@ -83,6 +118,7 @@ const FileProvider: React.FC = ({ children }) => {
 
   const processUpload = useCallback(
     (uploadedFile: IFile) => {
+
       const data = new FormData();
       if (uploadedFile.file) {
         data.append("file", uploadedFile.file, uploadedFile.name);
@@ -115,7 +151,8 @@ const FileProvider: React.FC = ({ children }) => {
             url_piano: response.data.url_piano,
             url_drums: response.data.url_drums,
             url_other: response.data.url_other,
-            url_vocals: response.data.url_vocals
+            url_vocals: response.data.url_vocals,
+            select: false
           });
         })
         .catch((err) => {
@@ -149,10 +186,14 @@ const FileProvider: React.FC = ({ children }) => {
         url_piano: "",
         url_drums: "",
         url_other: "",
+        urls_beats_vocals: [],
+        urls_beats_bass: [],
+        urls_beats_piano: [],
+        urls_beats_drums: [],
+        urls_beats_other: [],
+        select: false
       }));
 
-      // concat é mais performático que ...spread
-      // https://www.malgol.com/how-to-merge-two-arrays-in-javascript/
       setUploadedFiles((state) => state.concat(newUploadedFiles));
       newUploadedFiles.forEach(processUpload);
     },
@@ -164,8 +205,42 @@ const FileProvider: React.FC = ({ children }) => {
     setUploadedFiles((state) => state.filter((file) => file.id !== id));
   }, []);
 
+  const selectMusic = useCallback((file: IFile) => {
+    file.uploaded && setSelectedFile(file);
+  }, []);
+
+  const updateNote = useCallback((note: string, uploadedFile: IFile, index: number, instrument: string) => {
+    switch (instrument) {
+      case InstrumentType.Vocals:
+        uploadedFile.urls_beats_vocals[index].note = note;
+        updateFile(uploadedFile.id, { ...uploadedFile });
+        setSelectedFile(uploadedFile);
+        break;
+      case InstrumentType.Bass:
+        uploadedFile.urls_beats_bass[index].note = note;
+        updateFile(uploadedFile.id, { ...uploadedFile });
+        setSelectedFile(uploadedFile);
+        break;
+      case InstrumentType.Piano:
+        uploadedFile.urls_beats_piano[index].note = note;
+        updateFile(uploadedFile.id, { ...uploadedFile });
+        setSelectedFile(uploadedFile);
+        break;
+      case InstrumentType.Drums:
+        uploadedFile.urls_beats_drums[index].note = note;
+        updateFile(uploadedFile.id, { ...uploadedFile });
+        setSelectedFile(uploadedFile);
+        break;
+      case InstrumentType.Other:
+        uploadedFile.urls_beats_other[index].note = note;
+        updateFile(uploadedFile.id, { ...uploadedFile });
+        setSelectedFile(uploadedFile);
+        break;
+    }
+  }, [updateFile]);
+
   return (
-    <FileContext.Provider value={{ uploadedFiles, deleteFile, handleUpload }}>
+    <FileContext.Provider value={{ selectedFile, uploadedFiles, deleteFile, handleUpload, selectMusic, updateNote }}>
       {children}
     </FileContext.Provider>
   );

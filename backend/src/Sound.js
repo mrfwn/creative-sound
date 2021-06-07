@@ -9,10 +9,15 @@ const SoundSchema = new mongoose.Schema({
   key: String,
   url: String,
   url_vocals: String,
+  urls_beats_vocals: [String],
   url_bass: String,
+  urls_beats_bass: [String],
   url_piano: String,
+  urls_beats_piano: [String],
   url_drums: String,
+  urls_beats_drums: [String],
   url_other: String,
+  urls_beats_other: [String],
   createdAt: {
     type: Date,
     default: Date.now

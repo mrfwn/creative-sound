@@ -1,6 +1,8 @@
 FROM python:3.8-slim
 
 RUN pip install spleeter
+RUN pip install librosa
+RUN pip install ffmpeg-python
 
 RUN apt-get update
 RUN apt-get install -y nodejs curl gnupg gnupg2 gnupg1 libsndfile1 ffmpeg

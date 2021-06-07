@@ -19,6 +19,7 @@ const io = require("socket.io")(server, {
 
 
 //porta mongo
+
 mongoose.connect(
   process.env.MONGO_URL || "mongodb://localhost:27017",
   {
